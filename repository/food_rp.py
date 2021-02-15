@@ -1,4 +1,5 @@
 import model
+from datetime import date
 
 
 def get_all_food(cursor, total):
@@ -13,3 +14,14 @@ def get_all_food(cursor, total):
         list_food.append(food)
 
     return list_food
+
+
+def add_food(cursor, food):
+    sql_command = "INSERT INTO public.\"Food\"" \
+                  "(name, price, status, updated_date, " \
+                  "created_date, order_total, rate, unit_type, type_food)" \
+                  "VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
+        food.name, food.price, food.status, date.today(), date.today(), food.order_total, food.rate, food.unit_type,
+        food.type_food)
+
+    cursor.execute(sql_command)

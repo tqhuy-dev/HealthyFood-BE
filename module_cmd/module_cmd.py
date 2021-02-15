@@ -16,6 +16,10 @@ def run_api(cursor):
     def get_all_food():
         return controller.get_all_food_controller(request, cursor)
 
+    @app.route('/api/v1/food', methods=["POST"])
+    def add_food():
+        return controller.add_food_controller(request, cursor)
+
     @app.errorhandler(HTTPStatus.NOT_FOUND)
     def page_not_found(e):
         result = model.ErrorResponseDto(HTTPStatus.NOT_FOUND, "Api Not Found")

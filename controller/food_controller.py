@@ -21,3 +21,13 @@ def get_all_food_controller(request, cursor):
         print(sys.exc_info()[0])
         return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
+
+
+def add_food_controller(request, cursor):
+    try:
+        services.add_food(cursor, request)
+        return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Add Food Success").__dict__)
+    except:
+        print(sys.exc_info()[0])
+        return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,
+                                              "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
