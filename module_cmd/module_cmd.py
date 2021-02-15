@@ -1,5 +1,8 @@
 import flask
 from flask import request, jsonify
+import model
+from http import HTTPStatus
+import controller
 
 
 def run_api():
@@ -9,19 +12,11 @@ def run_api():
 
     @app.route('/api/v1/food', methods=["GET"])
     def get_all_food():
-        result = {
-            "code": 200,
-            "data": "Success"
-        }
+        return controller.get_all_food_controller(request)
 
-        return jsonify(result)
-
-    @app.errorhandler(404)
+    @app.errorhandler(HTTPStatus.NOT_FOUND)
     def page_not_found(e):
-        result = {
-            "code": 404,
-            "message": "Not Found"
-        }
-        return jsonify(result)
+        result = model.ErrorResponseDto(HTTPStatus.NOT_FOUND, "Api Not Found")
+        return jsonify(result.__dict__), HTTPStatus.NOT_FOUND
 
     app.run(host="0.0.0.0", port=3000)

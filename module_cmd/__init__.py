@@ -1,1 +1,1 @@
-from .module_cmd import run_api
+from .module_cmd import *
