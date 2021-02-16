@@ -54,3 +54,13 @@ def update_info_food_controller(request, pg_db, food_id):
         print(sys.exc_info()[0])
         return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
+
+
+def get_food_filter_controller():
+    try:
+        result = services.food_filter()
+        return jsonify(model.SuccessResponseDto(HTTPStatus.OK, result).__dict__)
+    except:
+        print(sys.exc_info()[0])
+        return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,
+                                              "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR

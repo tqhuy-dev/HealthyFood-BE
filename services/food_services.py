@@ -43,3 +43,17 @@ def update_info_food(pg_db, request, food_id):
         return False, "Body Is Not Valid"
     repository.update_info_food(pg_db, data, food_id)
     return True, "Success"
+
+
+def food_filter():
+    food_type_array = []
+    for item in constant.FOOD_TYPE_ARRAY:
+        enum_food_type = enum_class.FoodTypeEnum(item)
+        food_type_item = model.FoodTypeModel(enum_food_type.value, enum_food_type.name)
+        food_type_array.append(food_type_item.get_dict())
+
+    result = {
+        "food_type": food_type_array
+    }
+
+    return result

@@ -28,6 +28,10 @@ def run_api(pg_db):
     def update_info_food(food_id):
         return controller.update_info_food_controller(request, pg_db, food_id)
 
+    @app.route('/api/v1/food/filter', methods=["GET"])
+    def food_filter():
+        return controller.get_food_filter_controller()
+
     @app.errorhandler(HTTPStatus.NOT_FOUND)
     def page_not_found(e):
         result = model.ErrorResponseDto(HTTPStatus.NOT_FOUND, "Api Not Found")
