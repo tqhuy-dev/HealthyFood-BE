@@ -20,6 +20,10 @@ def run_api(pg_db):
     def add_food():
         return controller.add_food_controller(request, pg_db)
 
+    @app.route('/api/v1/food/<food_id>', methods=["PUT"])
+    def update_status_food(food_id):
+        return controller.update_food_controller(request, pg_db, food_id)
+
     @app.errorhandler(HTTPStatus.NOT_FOUND)
     def page_not_found(e):
         result = model.ErrorResponseDto(HTTPStatus.NOT_FOUND, "Api Not Found")

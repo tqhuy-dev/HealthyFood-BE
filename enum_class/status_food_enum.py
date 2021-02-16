@@ -16,3 +16,5 @@ class DefaultEnumMeta(enum.EnumMeta):
 class StatusFoodEnum(enum.IntEnum, metaclass=DefaultEnumMeta):
     Available = 1
     Closed = 2
+    OutStock = 3
+    OutPartialStock = 4

@@ -1,5 +1,6 @@
 class Food(object):
-    def __init__(self, name, type_food, price, status, order_total, rate, unit_type):
+    def __init__(self, id, name, type_food, price, status, order_total, rate, unit_type):
+        self.id = id
         self.name = name
         self.type_food = type_food
         self.price = price
