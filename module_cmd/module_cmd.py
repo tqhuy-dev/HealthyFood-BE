@@ -36,7 +36,7 @@ def run_api(pg_db):
     config = configparser.ConfigParser()
     config.read('config.ini')
     if config.get('APP', 'ENVIRONMENT') == 'development':
-        app.run(host="127.0.0.1", port=3000,debug=False)
+        app.run(host="127.0.0.1", port=3000, debug=False)
     else:
         http_server = WSGIServer(('', 3000), app)
         http_server.serve_forever()
