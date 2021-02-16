@@ -19,6 +19,7 @@ def get_all_food_controller(request, pg_db):
 
 
 def add_food_controller(request, pg_db):
+    
     try:
         services.add_food(pg_db, request)
         return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Add Food Success").__dict__)
