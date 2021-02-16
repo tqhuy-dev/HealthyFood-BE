@@ -10,8 +10,6 @@ import configparser
 def run_api(pg_db):
     app = flask.Flask(__name__)
 
-    # app.config["DEBUG"]
-
     @app.route('/api/v1/food', methods=["GET"])
     def get_all_food():
         return controller.get_all_food_controller(request, pg_db)
