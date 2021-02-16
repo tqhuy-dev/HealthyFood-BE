@@ -12,9 +12,10 @@ def get_all_food(pg_db, request):
     food_list = []
     for x in data:
         x.status = enum_class.StatusFoodEnum(x.status).name
+        x.type_food = enum_class.FoodTypeEnum(x.type_food).name
         food_list.append(x.__dict__)
 
-    result = (food_list, len(food_list))
+        result = (food_list, len(food_list))
     return result
 
 
