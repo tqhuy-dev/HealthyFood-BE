@@ -3,11 +3,14 @@ import model
 from http import HTTPStatus
 from flask import jsonify
 import sys
+import repository
 
 
 def add_material_controller(pg_db, request):
     try:
-        result, data = services.add_material(pg_db, request)
+        material_rp = repository.MaterialRepository(pg_db)
+        material_sv = services.MaterialServices(material_rp)
+        result, data = material_sv.add_material(request)
         if result:
             return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Success").__dict__)
         else:

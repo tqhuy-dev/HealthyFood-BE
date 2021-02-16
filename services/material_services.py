@@ -1,21 +1,30 @@
 import model
-import repository
+import abc
 
 
-def add_material(pg_db, request):
-    data = request.json
-    material = model.MaterialModel(0,
-                                   data["name"],
-                                   data["status"],
-                                   data["quantity"],
-                                   data["unit"],
-                                   data["description"],
-                                   data["material_type"],
-                                   ",".join(data["image"]))
+class AbstractMaterialServices(abc.ABC):
+    @abc.abstractmethod
+    def add_material(self, request):
+        pass
 
-    try:
-        material_repo = repository.MaterialRepository(pg_db)
-        material_repo.add_material(material)
-    except:
-        return False, "Internal Error:Execute Error"
-    return True, "Success"
+
+class MaterialServices(AbstractMaterialServices):
+    def __init__(self, material_rp):
+        self.material_rp = material_rp
+
+    def add_material(self, request):
+        data = request.json
+        material = model.MaterialModel(0,
+                                       data["name"],
+                                       data["status"],
+                                       data["quantity"],
+                                       data["unit"],
+                                       data["description"],
+                                       data["material_type"],
+                                       ",".join(data["image"]))
+
+        try:
+            self.material_rp.add_material(material)
+        except:
+            return False, "Internal Error:Execute Error"
+        return True, "Success"
