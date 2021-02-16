@@ -13,7 +13,7 @@ def get_all_food(pg_db, filter_body):
     if "food_type" in filter_body:
         sql_condition_arr.append("type_food = {}".format(filter_body["food_type"]))
     sql_condition = " and ".join(sql_condition_arr)
-    sql_query = "SELECT id,name,type_food,price,status,rate,order_total,unit_type,type_food " \
+    sql_query = "SELECT id,name,type_food,price,status,rate,order_total,unit,type_food " \
                 "from public.\"Food\" where {} limit {}".format(sql_condition, filter_body["total"])
     cursor = pg_db.cursor()
     cursor.execute(sql_query)
@@ -23,7 +23,7 @@ def get_all_food(pg_db, filter_body):
     for item in record:
         food = model.Food(item["id"], item["name"], item["type_food"], item["price"], item["status"],
                           item["rate"], item["order_total"],
-                          item["unit_type"])
+                          item["unit"])
         list_food.append(food)
 
     return list_food
@@ -32,9 +32,9 @@ def get_all_food(pg_db, filter_body):
 def add_food(pg_db, food):
     sql_command = "INSERT INTO public.\"Food\"" \
                   "(name, price, status, updated_date, " \
-                  "created_date, order_total, rate, unit_type, type_food)" \
+                  "created_date, order_total, rate, unit, type_food)" \
                   "VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
-        food.name, food.price, food.status, date.today(), date.today(), food.order_total, food.rate, food.unit_type,
+        food.name, food.price, food.status, date.today(), date.today(), food.order_total, food.rate, food.unit,
         food.type_food)
 
     cursor = pg_db.cursor()
@@ -57,8 +57,8 @@ def update_info_food(pg_db, data, food_id):
         data_update.append("name = '{}'".format(data["name"]))
     if "price" in data and data["price"] > 0:
         data_update.append("price = {}".format(data["price"]))
-    if "unit_type" in data and data["unit_type"] > 0:
-        data_update.append("unit_type = {}".format(data["unit_type"]))
+    if "unit" in data and len(data["unit"]) > 0:
+        data_update.append("unit = '{}'".format(data["unit"]))
     if "type_food" in data and data["type_food"] > 0:
         data_update.append("type_food = {}".format(data["type_food"]))
 

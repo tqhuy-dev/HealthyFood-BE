@@ -57,7 +57,7 @@ def get_all_food(pg_db, request):
 
 def add_food(pg_db, request):
     data = request.json
-    food = model.Food(0, data["name"], data["type_food"], data["price"], data["status"], 0, 5, data["unit_type"])
+    food = model.Food(0, data["name"], data["type_food"], data["price"], data["status"], 0, 5, data["unit"])
     repository.add_food(pg_db, food)
 
 
