@@ -30,9 +30,22 @@ def add_food_controller(request, pg_db):
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
 
 
-def update_food_controller(request, pg_db, food_id):
+def update_status_food_controller(request, pg_db, food_id):
     try:
         result, message = services.update_status_food(pg_db, request, int(food_id))
+        if result:
+            return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Update Status Food Success").__dict__)
+        else:
+            return jsonify(model.ErrorResponseDto(HTTPStatus.BAD_REQUEST, message).__dict__), HTTPStatus.BAD_REQUEST
+    except:
+        print(sys.exc_info()[0])
+        return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,
+                                              "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
+
+
+def update_info_food_controller(request, pg_db, food_id):
+    try:
+        result, message = services.update_info_food(pg_db, request, food_id)
         if result:
             return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Update Food Success").__dict__)
         else:

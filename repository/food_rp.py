@@ -39,3 +39,21 @@ def update_status_food(pg_db, status, food_id):
     cursor.execute(sql_command)
     pg_db.commit()
     cursor.close()
+
+
+def update_info_food(pg_db, data, food_id):
+    data_update = []
+    if "name" in data and len(data["name"]) > 0:
+        data_update.append("name = '{}'".format(data["name"]))
+    if "price" in data and data["price"] > 0:
+        data_update.append("price = {}".format(data["price"]))
+    if "unit_type" in data and data["unit_type"] > 0:
+        data_update.append("unit_type = {}".format(data["unit_type"]))
+    if "type_food" in data and data["type_food"] > 0:
+        data_update.append("type_food = {}".format(data["type_food"]))
+
+    sql_command = "UPDATE public.\"Food\" SET  {} where id = {}".format(",".join(data_update), food_id)
+    cursor = pg_db.cursor()
+    cursor.execute(sql_command)
+    pg_db.commit()
+    cursor.close()

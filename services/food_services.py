@@ -34,3 +34,11 @@ def update_status_food(pg_db, request, food_id):
         return False, "Id Food Is Not Valid"
     repository.update_status_food(pg_db, data["status"], food_id)
     return True, "Success"
+
+
+def update_info_food(pg_db, request, food_id):
+    data = request.json
+    if data is None:
+        return False, "Body Is Not Valid"
+    repository.update_info_food(pg_db, data, food_id)
+    return True, "Success"

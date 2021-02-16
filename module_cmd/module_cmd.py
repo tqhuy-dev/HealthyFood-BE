@@ -20,9 +20,13 @@ def run_api(pg_db):
     def add_food():
         return controller.add_food_controller(request, pg_db)
 
-    @app.route('/api/v1/food/<food_id>', methods=["PUT"])
+    @app.route('/api/v1/food/status/<food_id>', methods=["PUT"])
     def update_status_food(food_id):
-        return controller.update_food_controller(request, pg_db, food_id)
+        return controller.update_status_food_controller(request, pg_db, food_id)
+
+    @app.route('/api/v1/food/<food_id>', methods=["PUT"])
+    def update_info_food(food_id):
+        return controller.update_info_food_controller(request, pg_db, food_id)
 
     @app.errorhandler(HTTPStatus.NOT_FOUND)
     def page_not_found(e):
@@ -32,9 +36,7 @@ def run_api(pg_db):
     config = configparser.ConfigParser()
     config.read('config.ini')
     if config.get('APP', 'ENVIRONMENT') == 'development':
-        app.run(host="127.0.0.1", port=3000)
-        if __name__ == "__main__":
-            app.run(debug=True)
+        app.run(host="127.0.0.1", port=3000,debug=False)
     else:
         http_server = WSGIServer(('', 3000), app)
         http_server.serve_forever()
