@@ -5,13 +5,10 @@ from flask import jsonify
 import sys
 
 
-def get_all_food_controller(request, cursor):
+def get_all_food_controller(request, pg_db):
     try:
-        total = request.args.get('total')
-        if total is None:
-            total = '100'
 
-        (data_food, total_food) = services.get_all_food(cursor, int(total))
+        (data_food, total_food) = services.get_all_food(pg_db, request)
         result = {
             "food": data_food,
             "total": total_food
@@ -23,9 +20,9 @@ def get_all_food_controller(request, cursor):
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
 
 
-def add_food_controller(request, cursor):
+def add_food_controller(request, pg_db):
     try:
-        services.add_food(cursor, request)
+        services.add_food(pg_db, request)
         return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Add Food Success").__dict__)
     except:
         print(sys.exc_info()[0])

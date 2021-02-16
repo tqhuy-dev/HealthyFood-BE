@@ -7,18 +7,18 @@ from gevent.pywsgi import WSGIServer
 import configparser
 
 
-def run_api(cursor):
+def run_api(pg_db):
     app = flask.Flask(__name__)
 
     # app.config["DEBUG"]
 
     @app.route('/api/v1/food', methods=["GET"])
     def get_all_food():
-        return controller.get_all_food_controller(request, cursor)
+        return controller.get_all_food_controller(request, pg_db)
 
     @app.route('/api/v1/food', methods=["POST"])
     def add_food():
-        return controller.add_food_controller(request, cursor)
+        return controller.add_food_controller(request, pg_db)
 
     @app.errorhandler(HTTPStatus.NOT_FOUND)
     def page_not_found(e):

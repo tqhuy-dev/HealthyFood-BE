@@ -1,4 +1,4 @@
-class Food:
+class Food(object):
     def __init__(self, name, type_food, price, status, order_total, rate, unit_type):
         self.name = name
         self.type_food = type_food
