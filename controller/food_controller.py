@@ -7,13 +7,11 @@ import sys
 
 def get_all_food_controller(request, pg_db):
     try:
-
-        (data_food, total_food) = services.get_all_food(pg_db, request)
-        result = {
-            "food": data_food,
-            "total": total_food
-        }
-        return jsonify(model.SuccessResponseDto(HTTPStatus.OK, result).__dict__)
+        result, data = services.get_all_food(pg_db, request)
+        if result:
+            return jsonify(model.SuccessResponseDto(HTTPStatus.OK, data).__dict__)
+        else:
+            return jsonify(model.ErrorResponseDto(HTTPStatus.BAD_REQUEST, data).__dict__), HTTPStatus.BAD_REQUEST
     except:
         print(sys.exc_info()[0])
         return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,

@@ -2,9 +2,19 @@ import model
 from datetime import date
 
 
-def get_all_food(pg_db, total):
-    sql_query = "SELECT id,name,type_food,price,status,rate,order_total,unit_type " \
-                "from public.\"Food\" limit {}".format(total)
+def get_all_food(pg_db, filter_body):
+    sql_condition_arr = ["1=1"]
+
+    if "name" in filter_body:
+        sql_condition_arr.append("name like '%{}%'".format(filter_body["name"]))
+    if "min_price" in filter_body and "max_price" in filter_body:
+        sql_condition_arr.append(
+            "price >= {} and price <= {}".format(filter_body["min_price"], filter_body["max_price"]))
+    if "food_type" in filter_body:
+        sql_condition_arr.append("type_food = {}".format(filter_body["food_type"]))
+    sql_condition = " and ".join(sql_condition_arr)
+    sql_query = "SELECT id,name,type_food,price,status,rate,order_total,unit_type,type_food " \
+                "from public.\"Food\" where {} limit {}".format(sql_condition, filter_body["total"])
     cursor = pg_db.cursor()
     cursor.execute(sql_query)
     record = cursor.fetchall()
