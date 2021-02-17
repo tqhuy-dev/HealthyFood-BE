@@ -3,3 +3,6 @@ class MaterialTypeModel(object):
         self.id = id
         self.name = name
         self.status = status
+
+    def get_dict(self):
+        return self.__dict__

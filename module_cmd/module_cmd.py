@@ -38,6 +38,10 @@ def run_api(pg_db):
     def add_material_type():
         return controller.add_material_type_controller(pg_db, request)
 
+    @app.route('/api/v1/material_type', methods=["GET"])
+    def get_material_type():
+        return controller.get_material_type_controller(pg_db, request)
+
     @app.errorhandler(HTTPStatus.NOT_FOUND)
     def page_not_found(e):
         result = model.ErrorResponseDto(HTTPStatus.NOT_FOUND, "Api Not Found")
