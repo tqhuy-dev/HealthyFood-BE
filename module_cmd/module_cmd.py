@@ -48,9 +48,8 @@ def run_api(pg_db):
             test["Code"] = 404
             return jsonify(test)
         file = request.files["file"]
-        df = pd.read_excel(file, index_col=None, engine='openpyxl')
-        a = df["Age"]
-        print(a[1])
+        df = pd.read_csv(file)
+        print(df)
         return jsonify(test)
 
     @app.route('/api/v1/material_type', methods=["POST"])
