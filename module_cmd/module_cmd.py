@@ -58,6 +58,10 @@ def run_api(pg_db):
     def get_material_type():
         return controller.get_material_type_controller(pg_db, request)
 
+    @app.route('/api/v1/food_material/<food_id>', methods=["POST"])
+    def add_food_material(food_id):
+        return controller.add_food_material_controller(pg_db, request, food_id)
+
     @app.errorhandler(HTTPStatus.NOT_FOUND)
     def page_not_found(e):
         result = model.ErrorResponseDto(HTTPStatus.NOT_FOUND, "Api Not Found")

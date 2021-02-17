@@ -44,7 +44,6 @@ class MaterialRepository(AbstractMaterialRepository):
         cursor = self.pg_db.cursor()
         cursor.execute(sql_query)
         records = cursor.fetchall()
-
         list_material = []
 
         for item in records:
@@ -58,5 +57,5 @@ class MaterialRepository(AbstractMaterialRepository):
                                      item["image"])
 
             list_material.append(material)
-
+        cursor.close()
         return list_material
