@@ -20,10 +20,11 @@ class MaterialRepository(AbstractMaterialRepository):
 
     def add_material(self, material):
         sql_command = "INSERT INTO public.\"Material\"" \
-                      "(name, status, created_date, updated_date, quantity, unit, description, material_type, image)" \
+                      "(name, status, created_date, updated_date, quantity, unit, " \
+                      "description, material_type, image , price)" \
                       f"VALUES ('{material.name}', {material.status}, '{date.today()}', '{date.today()}'" \
                       f", {material.quantity}, '{material.unit}', " \
-                      f"'{material.description}', {material.material_type}, '{material.image}');"
+                      f"'{material.description}', {material.material_type}, '{material.image}' , {material.price});"
         cursor = self.pg_db.cursor()
         cursor.execute(sql_command)
         self.pg_db.commit()
@@ -38,7 +39,7 @@ class MaterialRepository(AbstractMaterialRepository):
         if "material_type" in data:
             sql_condition.append("material_type = {}".format(data["material_type"]))
 
-        sql_query = "select id,name,status,quantity,unit,description,material_type,image " \
+        sql_query = "select id,name,status,quantity,unit,description,material_type,image,price " \
                     "from public.\"Material\" where {} limit 100".format(" and ".join(sql_condition))
 
         cursor = self.pg_db.cursor()
@@ -54,7 +55,8 @@ class MaterialRepository(AbstractMaterialRepository):
                                      item["unit"],
                                      item["description"],
                                      item["material_type"],
-                                     item["image"])
+                                     item["image"],
+                                     float(item["price"]))
 
             list_material.append(material)
         cursor.close()

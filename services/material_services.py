@@ -44,7 +44,8 @@ class MaterialServices(AbstractMaterialServices):
                                            data["unit"],
                                            data["description"],
                                            data["material_type"],
-                                           ",".join(data["image"]))
+                                           ",".join(data["image"]),
+                                           data["price"])
 
             self.material_rp.add_material(material)
         except:
