@@ -38,6 +38,18 @@ def run_api(pg_db):
     def get_material():
         return controller.get_material_controller(pg_db, request)
 
+    @app.route('/api/v1/material/file', methods=["POST"])
+    def upload_file():
+        test = {
+            "Code": 200
+        }
+        if "file" not in request.files:
+            test["Code"] = 404
+            return jsonify(test)
+        file = request.files["file"]
+        a = file.filename
+        return jsonify(test)
+
     @app.route('/api/v1/material_type', methods=["POST"])
     def add_material_type():
         return controller.add_material_type_controller(pg_db, request)
