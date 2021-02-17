@@ -16,9 +16,9 @@ class MaterialTypeRepository(AbstractMaterialTypeRepository):
         sql_command = "INSERT INTO public.\"MaterialType\"" \
                       "(name, status, created_date, updated_date)" \
                       "VALUES ('{}', {}, '{}', '{}');".format(material_type.name,
-                                                             material_type.status,
-                                                             date.today(),
-                                                             date.today())
+                                                              material_type.status,
+                                                              date.today(),
+                                                              date.today())
 
         cursor = self.pg_db.cursor()
         cursor.execute(sql_command)
