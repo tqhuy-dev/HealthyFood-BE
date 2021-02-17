@@ -1,6 +1,6 @@
 import model
 import abc
-from enum_class import status_material_type_enum
+from enum_class import StatusMaterialTypeEnum
 
 
 class AbstractMaterialTypeServices(abc.ABC):
@@ -40,7 +40,7 @@ class MaterialTypeServices(AbstractMaterialTypeServices):
             data_material_type = self.material_type_rp.get_material_type(body_filter)
             result = []
             for item in data_material_type:
-                item.status = status_material_type_enum.StatusMaterialTypeEnum(item.status).name
+                item.status = StatusMaterialTypeEnum(item.status).name
                 result.append(item.get_dict())
             return True, result
         except:
