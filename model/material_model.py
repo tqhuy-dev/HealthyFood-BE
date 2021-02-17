@@ -8,3 +8,6 @@ class MaterialModel(object):
         self.description = description
         self.material_type = material_type
         self.image = image
+
+    def get_dict(self):
+        return self.__dict__
