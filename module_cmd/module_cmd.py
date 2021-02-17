@@ -5,6 +5,7 @@ from http import HTTPStatus
 import controller
 from gevent.pywsgi import WSGIServer
 import configparser
+import pandas as pd
 
 
 def run_api(pg_db):
@@ -47,7 +48,9 @@ def run_api(pg_db):
             test["Code"] = 404
             return jsonify(test)
         file = request.files["file"]
-        a = file.filename
+        df = pd.read_excel(file, index_col=None, engine='openpyxl')
+        a = df["Age"]
+        print(a[1])
         return jsonify(test)
 
     @app.route('/api/v1/material_type', methods=["POST"])
