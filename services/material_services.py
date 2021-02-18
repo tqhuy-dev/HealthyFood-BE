@@ -1,6 +1,7 @@
 import model
 import abc
 from enum_class import StatusMaterialTypeEnum
+import pandas as pd
 
 
 class AbstractMaterialServices(abc.ABC):
@@ -10,6 +11,10 @@ class AbstractMaterialServices(abc.ABC):
 
     @abc.abstractmethod
     def get_material_sv(self, request):
+        pass
+
+    @abc.abstractmethod
+    def update_file_list_material(self, request):
         pass
 
 
@@ -73,3 +78,14 @@ class MaterialServices(AbstractMaterialServices):
             return True, result
         except:
             return False, "Internal Error"
+
+    def update_file_list_material(self, request):
+        if "file" not in request.files:
+            return False, "File must not empty"
+        file = request.files["file"]
+        path_file = file.filename.split(".")
+        if len(path_file) > 1 and path_file[len(path_file) - 1] != "csv":
+            return False, "File CSV"
+        df = pd.read_csv(file)
+        return True, "Success"
+        pass

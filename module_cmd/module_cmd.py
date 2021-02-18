@@ -5,7 +5,6 @@ from http import HTTPStatus
 import controller
 from gevent.pywsgi import WSGIServer
 import configparser
-import pandas as pd
 
 
 def run_api(pg_db):
@@ -41,16 +40,7 @@ def run_api(pg_db):
 
     @app.route('/api/v1/material/file', methods=["POST"])
     def upload_file():
-        test = {
-            "Code": 200
-        }
-        if "file" not in request.files:
-            test["Code"] = 404
-            return jsonify(test)
-        file = request.files["file"]
-        df = pd.read_csv(file)
-        print(df)
-        return jsonify(test)
+        return controller.update_file_material_controller(pg_db, request)
 
     @app.route('/api/v1/material_type', methods=["POST"])
     def add_material_type():
