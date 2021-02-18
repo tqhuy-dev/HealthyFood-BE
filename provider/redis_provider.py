@@ -8,6 +8,7 @@ import common
 
 def get_redis(config):
     r = redis.Redis(host=config.get('REDIS', 'HOST'), port=config.get('REDIS', 'PORT'), db=0)
+    r.ping()
     print("Connect Redis")
     return r
 
