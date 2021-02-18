@@ -1,0 +1,9 @@
+{
+  "Message": [
+    {
+      "QueueName": "AddMaterial",
+      "Active": true,
+      "NumRetry": 0
+    }
+  ]
+}
