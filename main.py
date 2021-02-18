@@ -4,27 +4,10 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 import configparser
 import pika
+import provider
 
-# Read Config File
-config = configparser.ConfigParser()
-config.read('config.ini')
-print(config.get('APP', 'ENVIRONMENT'))
-# Connect Postgres
-pg_db = psycopg2.connect(user=config.get('DATABASE', 'USER'),
-                         password=config.get('DATABASE', 'PASSWORD'),
-                         host=config.get('DATABASE', 'HOST'),
-                         port=config.get('DATABASE', 'PORT'),
-                         database="FoodDB",
-                         cursor_factory=RealDictCursor)
-
-print("Connect Postgres Success")
-# Connect RabbitMQ
-
-connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost'))
-channel = connection.channel()
-
-channel.queue_declare(queue='task_queue', durable=True)
+pg_db = provider.connection_pg_db()
+channel = provider.connection_rabbitmq()
 
 # Run App
 
