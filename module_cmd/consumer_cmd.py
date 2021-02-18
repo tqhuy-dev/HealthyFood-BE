@@ -1,13 +1,13 @@
 import time
 
 
-def run_consumer(mq_channel):
+def run_consumer(mq_channel_connect):
     print("Running Consumer....")
 
-    mq_channel.basic_qos(prefetch_count=1)
-    mq_channel.basic_consume(queue='task_queue', on_message_callback=callback)
+    mq_channel_connect.basic_qos(prefetch_count=1)
+    mq_channel_connect.basic_consume(queue='task_queue', on_message_callback=callback)
 
-    mq_channel.start_consuming()
+    mq_channel_connect.start_consuming()
 
 
 def callback(ch, method, properties, body):

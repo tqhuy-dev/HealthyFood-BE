@@ -2,7 +2,7 @@ import services
 import model
 from http import HTTPStatus
 from flask import jsonify
-import sys
+import provider
 import repository
 
 
@@ -19,10 +19,12 @@ def add_material_type_controller(pg_db, request):
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
 
 
-def get_material_type_controller(pg_db, request):
+def get_material_type_controller(pg_db, redis_connect, request):
     try:
         material_type_rp = repository.MaterialTypeRepository(pg_db)
         material_type_sv = services.MaterialTypeServices(material_type_rp)
+        redis_manager = provider.RedisManager(redis_connect)
+        material_type_sv.set_redis_manager(redis_manager)
         result, data = material_type_sv.get_material_type_sv(request)
         if result is True:
             return jsonify(model.SuccessResponseDto(HTTPStatus.OK, data).__dict__)

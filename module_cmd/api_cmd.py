@@ -7,7 +7,7 @@ from gevent.pywsgi import WSGIServer
 import configparser
 
 
-def run_api(pg_db, mq_channel, redis_manager):
+def run_api(pg_db, mq_channel_connect, redis_connect):
     print("Init RestAPI Python")
     app = flask.Flask(__name__)
 
@@ -49,7 +49,7 @@ def run_api(pg_db, mq_channel, redis_manager):
 
     @app.route('/api/v1/material_type', methods=["GET"])
     def get_material_type():
-        return controller.get_material_type_controller(pg_db, request)
+        return controller.get_material_type_controller(pg_db, redis_connect, request)
 
     @app.route('/api/v1/food_material/<food_id>', methods=["POST"])
     def add_food_material(food_id):
