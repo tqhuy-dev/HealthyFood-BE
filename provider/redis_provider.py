@@ -3,7 +3,7 @@ import common
 
 
 # r = redis.Redis()
-# r.smembers()
+# r.delete()
 
 
 def get_redis(config):
@@ -27,3 +27,7 @@ class RedisManager(object):
             return data_redis
         except:
             return []
+
+    def remove_key(self, key):
+        self.redis_mn.delete(key)
+        print("Delete key success")

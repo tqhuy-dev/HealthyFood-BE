@@ -45,7 +45,7 @@ def run_api(pg_db, mq_channel_connect, redis_connect):
 
     @app.route('/api/v1/material_type', methods=["POST"])
     def add_material_type():
-        return controller.add_material_type_controller(pg_db, request)
+        return controller.add_material_type_controller(pg_db, redis_connect, request)
 
     @app.route('/api/v1/material_type', methods=["GET"])
     def get_material_type():

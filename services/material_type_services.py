@@ -34,7 +34,7 @@ class MaterialTypeServices(AbstractMaterialTypeServices):
             self.material_type_rp.add_material_type(material_type)
         except:
             return False, "Internal Error: Execute Error"
-
+        self.redis_manager.remove_key('material_type')
         return True, "Success"
 
     def get_material_type_sv(self, request):
