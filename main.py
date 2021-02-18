@@ -8,7 +8,7 @@ import provider
 
 pg_db = provider.connection_pg_db()
 channel = provider.connection_rabbitmq()
-
+redis = provider.get_redis()
 # Run App
 
 
