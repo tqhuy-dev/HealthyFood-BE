@@ -13,6 +13,10 @@ class AbstractMaterialRepository(abc.ABC):
     def get_material(self, data):
         pass
 
+    @abc.abstractmethod
+    def add_material_by_list(self, list_material):
+        pass
+
 
 class MaterialRepository(AbstractMaterialRepository):
     def __init__(self, pg_db):
@@ -61,3 +65,21 @@ class MaterialRepository(AbstractMaterialRepository):
             list_material.append(material)
         cursor.close()
         return list_material
+
+    def add_material_by_list(self, list_material):
+        sql_command_arr = []
+        for material in list_material:
+            sql_command_arr.append(f"('{material.name}', {material.status}, '{date.today()}', '{date.today()}'" \
+                                   f", {material.quantity}, '{material.unit}', " \
+                                   f"'{material.description}', {material.material_type}, "
+                                   f"'{material.image}' , {material.price})")
+
+        sql_command = "INSERT INTO public.\"Material\"" \
+                      "(name, status, created_date, updated_date, quantity, unit, " \
+                      "description, material_type, image , price)" \
+                      "VALUES {}".format(",".join(sql_command_arr))
+
+        cursor = self.pg_db.cursor()
+        cursor.execute(sql_command)
+        self.pg_db.commit()
+        cursor.close()

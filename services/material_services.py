@@ -80,12 +80,34 @@ class MaterialServices(AbstractMaterialServices):
             return False, "Internal Error"
 
     def update_file_list_material(self, request):
-        if "file" not in request.files:
-            return False, "File must not empty"
-        file = request.files["file"]
-        path_file = file.filename.split(".")
-        if len(path_file) > 1 and path_file[len(path_file) - 1] != "csv":
-            return False, "File CSV"
-        df = pd.read_csv(file)
+        try:
+            if "file" not in request.files:
+                return False, "File must not empty"
+            file = request.files["file"]
+            path_file = file.filename.split(".")
+            if len(path_file) > 1 and path_file[len(path_file) - 1] != "csv":
+                return False, "File CSV"
+            df = pd.read_csv(file)
+            list_material = []
+            count = 0
+            for index in range(len(df)):
+                if count < 5:
+                    material = model.MaterialModel(0,
+                                                   df["Name"][index],
+                                                   df["Status"][index],
+                                                   df["Quantity"][index],
+                                                   df["Unit"][index],
+                                                   df["Description"][index],
+                                                   df["MaterialType"][index],
+                                                   df["Image"][index],
+                                                   df["Price"][index])
+                    list_material.append(material)
+                    count += 1
+                    # self.material_rp.add_material_by_list(list_material)
+                else:
+                    list_material = []
+                    count = 0
+        except:
+            return False, "Internal Error"
         return True, "Success"
         pass
