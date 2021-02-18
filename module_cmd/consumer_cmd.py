@@ -1,12 +1,7 @@
-import pika
 import time
 
 
-def run_consumer():
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host='localhost'))
-    channel = connection.channel()
-    channel.queue_declare(queue='task_queue', durable=True)
+def run_consumer(channel):
     print("Running Consumer....")
 
     channel.basic_qos(prefetch_count=1)
