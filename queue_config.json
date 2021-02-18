@@ -4,6 +4,11 @@
       "QueueName": "AddMaterial",
       "Active": true,
       "NumRetry": 0
+    },
+    {
+      "QueueName": "Test",
+      "Active": true,
+      "NumRetry": 0
     }
   ]
 }

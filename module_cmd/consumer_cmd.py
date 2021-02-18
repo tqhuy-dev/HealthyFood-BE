@@ -1,17 +1,14 @@
-import time
+import json
+from queue_mq import switch_consumer
 
 
 def run_consumer(mq_channel_connect):
-    print("Running Consumer....")
-
     mq_channel_connect.basic_qos(prefetch_count=1)
-    mq_channel_connect.basic_consume(queue='task_queue', on_message_callback=callback)
-
+    with open("queue_config.json") as data_json_file:
+        data = json.load(data_json_file)
+        for item in data["Message"]:
+            consumer_model = switch_consumer(item["QueueName"])
+            mq_channel_connect.basic_consume(queue=consumer_model.queue_name,
+                                             on_message_callback=consumer_model.callback)
+    print("Running Consumer....")
     mq_channel_connect.start_consuming()
-
-
-def callback(ch, method, properties, body):
-    print(" [x] Received %r" % body.decode())
-    time.sleep(body.count(b'.'))
-    print(" [x] Done")
-    ch.basic_ack(delivery_tag=method.delivery_tag)
