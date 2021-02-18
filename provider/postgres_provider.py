@@ -1,12 +1,8 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
-import configparser
 
 
-def connection_pg_db():
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    print(config.get('APP', 'ENVIRONMENT'))
+def connection_pg_db(config):
     # Connect Postgres
     pg_db = psycopg2.connect(user=config.get('DATABASE', 'USER'),
                              password=config.get('DATABASE', 'PASSWORD'),

@@ -6,9 +6,11 @@ import configparser
 import pika
 import provider
 
-pg_db = provider.connection_pg_db()
-channel = provider.connection_rabbitmq()
-redis = provider.get_redis()
+config = provider.get_config()
+
+pg_db = provider.connection_pg_db(config)
+channel = provider.connection_rabbitmq(config)
+redis = provider.get_redis(config)
 # Run App
 
 
