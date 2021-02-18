@@ -16,6 +16,7 @@ class AbstractMaterialTypeServices(abc.ABC):
 class MaterialTypeServices(AbstractMaterialTypeServices):
     def __init__(self, material_type_rp):
         self.material_type_rp = material_type_rp
+        self.redis_manager = None
 
     def add_material_type_sv(self, request):
         data = request.json

@@ -5,11 +5,9 @@ from http import HTTPStatus
 import controller
 from gevent.pywsgi import WSGIServer
 import configparser
-import pika
 
 
-def run_api(pg_db, channel):
-
+def run_api(pg_db, mq_channel, redis_manager):
     print("Init RestAPI Python")
     app = flask.Flask(__name__)
 

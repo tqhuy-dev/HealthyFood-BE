@@ -1,16 +1,12 @@
 import sys
 import module_cmd
-import psycopg2
-from psycopg2.extras import RealDictCursor
-import configparser
-import pika
 import provider
 
 config = provider.get_config()
 
 pg_db = provider.connection_pg_db(config)
-channel = provider.connection_rabbitmq(config)
-redis = provider.get_redis(config)
+mq_channel = provider.connection_rabbitmq(config)
+redis_manager = provider.get_redis(config)
 # Run App
 
 
@@ -19,8 +15,8 @@ if len(sys.argv) < 2:
 else:
     if len(sys.argv) == 2:
         if sys.argv[1] == 'api':
-            module_cmd.run_api(pg_db, channel)
+            module_cmd.run_api(pg_db, mq_channel, redis_manager)
         elif sys.argv[1] == 'consumer':
-            module_cmd.run_consumer(channel)
+            module_cmd.run_consumer(mq_channel)
     else:
         print("Hello World")
