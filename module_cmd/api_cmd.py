@@ -8,6 +8,7 @@ import configparser
 
 
 def run_api(pg_db):
+    print("Init RestAPI Python")
     app = flask.Flask(__name__)
 
     @app.route('/api/v1/food', methods=["GET"])

@@ -17,12 +17,17 @@ pg_db = psycopg2.connect(user=config.get('DATABASE', 'USER'),
                          cursor_factory=RealDictCursor)
 
 print("Connect Postgres Success")
+
 # Run App
+
+
 if len(sys.argv) < 2:
     print("Missing Args")
 else:
-    if len(sys.argv) == 2 and sys.argv[1] == 'api':
-        print("run api")
-        module_cmd.run_api(pg_db)
+    if len(sys.argv) == 2:
+        if sys.argv[1] == 'api':
+            module_cmd.run_api(pg_db)
+        elif sys.argv[1] == 'consumer':
+            module_cmd.run_consumer()
     else:
         print("Hello World")
