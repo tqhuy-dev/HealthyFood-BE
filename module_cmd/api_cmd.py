@@ -5,9 +5,20 @@ from http import HTTPStatus
 import controller
 from gevent.pywsgi import WSGIServer
 import configparser
+import pika
+
+
+def setup_queue():
+    connection = pika.BlockingConnection(
+        pika.ConnectionParameters(host='localhost'))
+    channel = connection.channel()
+
+    channel.queue_declare(queue='task_queue', durable=True)
 
 
 def run_api(pg_db):
+
+    setup_queue()
     print("Init RestAPI Python")
     app = flask.Flask(__name__)
 
