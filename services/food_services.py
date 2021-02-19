@@ -18,7 +18,8 @@ def get_all_food(pg_db, request):
         for index in range(len(range_price)):
             try:
                 range_price[index] = int(range_price[index])
-            except:
+            except Exception as e:
+                print(e)
                 return False, "Bad Request: Price Is Invalid"
 
         if len(range_price) == 2:
@@ -35,7 +36,8 @@ def get_all_food(pg_db, request):
     if request.args.get('food_type') is not None:
         try:
             filter_body["food_type"] = int(request.args.get('food_type'))
-        except:
+        except Exception as e:
+            print(e)
             return False, "Bad Request: food_type is invalid"
 
     if request.args.get('name') is not None:

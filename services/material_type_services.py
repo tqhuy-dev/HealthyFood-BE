@@ -32,7 +32,8 @@ class MaterialTypeServices(AbstractMaterialTypeServices):
         material_type = model.MaterialTypeModel(0, data["name"], data["status"])
         try:
             self.material_type_rp.add_material_type(material_type)
-        except:
+        except Exception as e:
+            print(e)
             return False, "Internal Error: Execute Error"
         self.redis_manager.remove_key('material_type')
         return True, "Success"
@@ -66,6 +67,7 @@ class MaterialTypeServices(AbstractMaterialTypeServices):
             if is_filter is False:
                 self.redis_manager.init_set_redis('material_type', result)
             return True, result
-        except:
+        except Exception as e:
+            print(e)
             print(sys.exc_info()[0])
             return False, "Internal Error: Execute Error"

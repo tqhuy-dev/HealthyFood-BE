@@ -1,4 +1,3 @@
-import model
 import abc
 
 
@@ -17,7 +16,6 @@ class FoodMaterialRepository(AbstractFoodMaterialRepository):
         self.pg_db = pg_db
 
     def add_food_material(self, food_material):
-
         sql_command_item = []
         for item in food_material:
             sql_command_item.append(f"({item.food_id}, {item.material_id}, {item.quantity}, '{item.unit}')")

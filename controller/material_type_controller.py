@@ -16,7 +16,8 @@ def add_material_type_controller(pg_db, redis_connect, request):
         if result is False:
             return jsonify(model.ErrorResponseDto(HTTPStatus.BAD_REQUEST, data).__dict__), HTTPStatus.BAD_REQUEST
         return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Success").__dict__)
-    except:
+    except Exception as e:
+        print(e)
         return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
 
@@ -32,6 +33,7 @@ def get_material_type_controller(pg_db, redis_connect, request):
             return jsonify(model.SuccessResponseDto(HTTPStatus.OK, data).__dict__)
         else:
             return jsonify(model.ErrorResponseDto(HTTPStatus.BAD_REQUEST, data).__dict__), HTTPStatus.BAD_REQUEST
-    except:
+    except Exception as e:
+        print(e)
         return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR

@@ -33,9 +33,9 @@ def add_food(pg_db, food):
     sql_command = "INSERT INTO public.\"Food\"" \
                   "(name, price, status, updated_date, " \
                   "created_date, order_total, rate, unit, type_food)" \
-                  "VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
-        food.name, food.price, food.status, date.today(), date.today(), food.order_total, food.rate, food.unit,
-        food.type_food)
+                  "VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')". \
+        format(food.name, food.price, food.status, date.today(), date.today(), food.order_total, food.rate, food.unit,
+               food.type_food)
 
     cursor = pg_db.cursor()
     cursor.execute(sql_command)

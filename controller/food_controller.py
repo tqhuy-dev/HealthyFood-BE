@@ -2,7 +2,6 @@ import services
 import model
 from http import HTTPStatus
 from flask import jsonify
-import sys
 
 
 def get_all_food_controller(request, pg_db):
@@ -12,19 +11,18 @@ def get_all_food_controller(request, pg_db):
             return jsonify(model.SuccessResponseDto(HTTPStatus.OK, data).__dict__)
         else:
             return jsonify(model.ErrorResponseDto(HTTPStatus.BAD_REQUEST, data).__dict__), HTTPStatus.BAD_REQUEST
-    except:
-        print(sys.exc_info()[0])
+    except Exception as e:
+        print(e)
         return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 def add_food_controller(request, pg_db):
-
     try:
         services.add_food(pg_db, request)
         return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Add Food Success").__dict__)
-    except:
-        print(sys.exc_info()[0])
+    except Exception as e:
+        print(e)
         return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
 
@@ -36,8 +34,8 @@ def update_status_food_controller(request, pg_db, food_id):
             return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Update Status Food Success").__dict__)
         else:
             return jsonify(model.ErrorResponseDto(HTTPStatus.BAD_REQUEST, message).__dict__), HTTPStatus.BAD_REQUEST
-    except:
-        print(sys.exc_info()[0])
+    except Exception as e:
+        print(e)
         return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
 
@@ -49,8 +47,8 @@ def update_info_food_controller(request, pg_db, food_id):
             return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Update Food Success").__dict__)
         else:
             return jsonify(model.ErrorResponseDto(HTTPStatus.BAD_REQUEST, message).__dict__), HTTPStatus.BAD_REQUEST
-    except:
-        print(sys.exc_info()[0])
+    except Exception as e:
+        print(e)
         return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
 
@@ -59,7 +57,7 @@ def get_food_filter_controller():
     try:
         result = services.food_filter()
         return jsonify(model.SuccessResponseDto(HTTPStatus.OK, result).__dict__)
-    except:
-        print(sys.exc_info()[0])
+    except Exception as e:
+        print(e)
         return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR

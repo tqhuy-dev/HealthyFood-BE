@@ -25,7 +25,8 @@ class FoodMaterialServices(AbstractFoodMaterialServices):
                 list_fm.append(fm_model)
             self.food_material_rp.add_food_material(list_fm)
             return True, "Success"
-        except:
+        except Exception as e:
+            print(e)
             return False, "Internal Error"
 
     def get_food_material_sv(self, food_id):

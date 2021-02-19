@@ -1,7 +1,6 @@
 from datetime import date
 import abc
 import model
-import array
 
 
 class AbstractMaterialTypeRepository(abc.ABC):

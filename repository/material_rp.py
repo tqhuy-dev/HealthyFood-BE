@@ -69,8 +69,8 @@ class MaterialRepository(AbstractMaterialRepository):
     def add_material_by_list(self, list_material):
         sql_command_arr = []
         for material in list_material:
-            sql_command_arr.append(f"('{material.name}', {material.status}, '{date.today()}', '{date.today()}'" \
-                                   f", {material.quantity}, '{material.unit}', " \
+            sql_command_arr.append(f"('{material.name}', {material.status}, '{date.today()}', '{date.today()}'"
+                                   f", {material.quantity}, '{material.unit}', "
                                    f"'{material.description}', {material.material_type}, "
                                    f"'{material.image}' , {material.price})")
 

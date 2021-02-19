@@ -17,7 +17,8 @@ def add_material_controller(pg_db, request):
             return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Success").__dict__)
         else:
             return jsonify(model.ErrorResponseDto(HTTPStatus.BAD_REQUEST, data).__dict__), HTTPStatus.BAD_REQUEST
-    except:
+    except Exception as e:
+        print(e)
         return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
 
@@ -30,7 +31,8 @@ def get_material_controller(pg_db, request):
         if result is False:
             return jsonify(model.ErrorResponseDto(HTTPStatus.BAD_REQUEST, data).__dict__), HTTPStatus.BAD_REQUEST
         return jsonify(model.SuccessResponseDto(HTTPStatus.OK, data).__dict__)
-    except:
+    except Exception as e:
+        print(e)
         return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
 
@@ -45,6 +47,7 @@ def update_file_material_controller(pg_db, mq_channel, request):
         if result is False:
             return jsonify(model.ErrorResponseDto(HTTPStatus.BAD_REQUEST, data).__dict__), HTTPStatus.BAD_REQUEST
         return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Success").__dict__)
-    except:
+    except Exception as e:
+        print(e)
         return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
