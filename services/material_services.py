@@ -1,6 +1,6 @@
 import model
 import abc
-from enum_class import StatusMaterialTypeEnum
+from enum_class import StatusMaterialTypeEnum, QueueNameEnum
 import pandas as pd
 
 
@@ -17,14 +17,26 @@ class AbstractMaterialServices(abc.ABC):
     def update_file_list_material(self, request):
         pass
 
+    @abc.abstractmethod
+    def set_material_type_rp(self, material_type_rp):
+        pass
+
+    @abc.abstractmethod
+    def set_mq_channel_manager(self, mq_channel_manager):
+        pass
+
 
 class MaterialServices(AbstractMaterialServices):
     def __init__(self, material_rp):
         self.material_rp = material_rp
         self.material_type_rp = None
+        self.mq_channel_manager = None
 
     def set_material_type_rp(self, material_type_rp):
         self.material_type_rp = material_type_rp
+
+    def set_mq_channel_manager(self, mq_channel_manager):
+        self.mq_channel_manager = mq_channel_manager
 
     def add_material_sv(self, request):
         data = request.json
@@ -53,7 +65,8 @@ class MaterialServices(AbstractMaterialServices):
                                            data["price"])
 
             self.material_rp.add_material(material)
-        except:
+        except Exception as e:
+            print(e)
             return False, "Internal Error:Execute Error"
         return True, "Success"
 
@@ -76,7 +89,8 @@ class MaterialServices(AbstractMaterialServices):
                 result.append(item.get_dict())
 
             return True, result
-        except:
+        except Exception as e:
+            print(e)
             return False, "Internal Error"
 
     def update_file_list_material(self, request):
@@ -91,23 +105,25 @@ class MaterialServices(AbstractMaterialServices):
             list_material = []
             count = 0
             for index in range(len(df)):
-                if count < 5:
-                    material = model.MaterialModel(0,
-                                                   df["Name"][index],
-                                                   df["Status"][index],
-                                                   df["Quantity"][index],
-                                                   df["Unit"][index],
-                                                   df["Description"][index],
-                                                   df["MaterialType"][index],
-                                                   df["Image"][index],
-                                                   df["Price"][index])
-                    list_material.append(material)
-                    count += 1
-                    # self.material_rp.add_material_by_list(list_material)
-                else:
-                    list_material = []
-                    count = 0
-        except:
+                material = model.MaterialModel(0,
+                                               df["Name"][index],
+                                               int(df["Status"][index]),
+                                               int(df["Quantity"][index]),
+                                               df["Unit"][index],
+                                               df["Description"][index],
+                                               int(df["MaterialType"][index]),
+                                               df["Image"][index],
+                                               int(df["Price"][index]))
+                list_material.append(material.get_dict())
+                count += 1
+                if count == 5:
+                    self.mq_channel_manager.publish_message(QueueNameEnum.AddMaterial.value, list_material)
+                    list_material.clear()
+
+            if len(list_material) > 0:
+                self.mq_channel_manager.publish_message(QueueNameEnum.AddMaterial.value, list_material)
+        except Exception as e:
+            print(e)
             return False, "Internal Error"
         return True, "Success"
         pass

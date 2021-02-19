@@ -17,3 +17,19 @@ def connection_rabbitmq(config):
 
     print("Connect RabbitMQ")
     return channel
+
+
+class MQChannelManager(object):
+    def __init__(self, mq_channel):
+        self.mq_channel = mq_channel
+
+    def publish_message(self, key, body_dict):
+        print(json.dumps(body_dict))
+        self.mq_channel.basic_publish(
+            exchange='',
+            routing_key=key,
+            body=json.dumps(body_dict),
+            properties=pika.BasicProperties(
+                delivery_mode=2,  # make message persistent
+            ))
+        print("Queue: ", key, " receive message", body_dict)

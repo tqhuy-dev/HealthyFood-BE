@@ -1,5 +1,6 @@
 from abstract import AbstractConsumerModel
 from .add_material_consumer_model import AddMaterialConsumerModel, TestConsumerModel
+from repository import MaterialRepository
 
 
 class DefaultConsumerModel(AbstractConsumerModel):
@@ -12,9 +13,10 @@ class DefaultConsumerModel(AbstractConsumerModel):
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-def switch_consumer(queue_name):
+def switch_consumer(queue_name, pg_db):
     if queue_name == "AddMaterial":
-        return AddMaterialConsumerModel(queue_name)
+        material_rp = MaterialRepository(pg_db)
+        return AddMaterialConsumerModel(queue_name, material_rp)
     elif queue_name == "Test":
         return TestConsumerModel(queue_name)
     return DefaultConsumerModel("")
