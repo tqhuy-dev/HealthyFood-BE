@@ -30,8 +30,8 @@ def get_all_food(pg_db, request):
                 filter_body["min_price"] = range_price[0]
                 filter_body["max_price"] = range_price[1]
         elif len(range_price) == 1:
-            filter_body["min_price"] = range_price[0] - 10000
-            filter_body["max_price"] = range_price[0] + 10000
+            filter_body["min_price"] = range_price[0]
+            filter_body["max_price"] = range_price[0]
 
     if request.args.get('food_type') is not None:
         try:

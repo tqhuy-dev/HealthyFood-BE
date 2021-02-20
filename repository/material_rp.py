@@ -42,6 +42,9 @@ class MaterialRepository(AbstractMaterialRepository):
             sql_condition.append("status = {}".format(data["status"]))
         if "material_type" in data:
             sql_condition.append("material_type = {}".format(data["material_type"]))
+        if "max_price" in data and "min_price" in data:
+            sql_condition.append(
+                "price >= {} and price <= {}".format(data["min_price"], data["max_price"]))
 
         sql_query = "select id,name,status,quantity,unit,description,material_type,image,price " \
                     "from public.\"Material\" where {} limit 100".format(" and ".join(sql_condition))
