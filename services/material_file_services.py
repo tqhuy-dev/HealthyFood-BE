@@ -94,7 +94,9 @@ class MaterialFileServices(object):
 
     def upload_file_material(self, request):
         try:
-            file = request.files
+            if "file" not in request.files:
+                return False, "Bad Request"
+            file = request.files["file"]
             pathname = file.filename.split(".")
             if len(pathname) <= 1:
                 return False, "Invalid File"
@@ -102,11 +104,13 @@ class MaterialFileServices(object):
                 return False, "Wrong Type File"
 
             df = pd.read_csv(file)
+            if "Edited" not in df or "Id" not in df:
+                return False, "Missing Column"
             list_material = []
             count = 0
             for index in range(len(df)):
-                if df["Edited"][index]:
-                    material = model.MaterialModel(df["Id"][index],
+                if df["Edited"][index] == 1:
+                    material = model.MaterialModel(int(df["Id"][index]),
                                                    df["Name"][index],
                                                    int(df["Status"][index]),
                                                    int(df["Quantity"][index]),
@@ -116,13 +120,14 @@ class MaterialFileServices(object):
                                                    df["Image"][index],
                                                    int(df["Price"][index]))
                     list_material.append(material.get_dict())
+                    count += 1
                     if count == 5:
-                        self.mq_channel_manager.publish_message(QueueNameEnum.UpdateMaterial, list_material)
+                        self.mq_channel_manager.publish_message(QueueNameEnum.UpdateMaterial.value, list_material)
                         list_material.clear()
                         count = 0
 
             if len(list_material) > 0:
-                self.mq_channel_manager.publish_message(QueueNameEnum.UpdateMaterial, list_material)
+                self.mq_channel_manager.publish_message(QueueNameEnum.UpdateMaterial.value, list_material)
             return True, "Success"
         except Exception as e:
             print(e)

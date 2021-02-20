@@ -24,7 +24,6 @@ class MQChannelManager(object):
         self.mq_channel = mq_channel
 
     def publish_message(self, key, body_dict):
-        print(json.dumps(body_dict))
         self.mq_channel.basic_publish(
             exchange='',
             routing_key=key,

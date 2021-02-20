@@ -1,12 +1,12 @@
-from abstract import AbstractConsumerModel
+from .base_consumer_model import AbstractConsumerModel
 import json
 from model import MaterialModel
 
 
-class AddMaterialConsumerModel(AbstractConsumerModel):
-    def __init__(self, queue_name, material_repo):
+class UpdateMaterialConsumer(AbstractConsumerModel):
+    def __init__(self, queue_name, material_rp):
         self.queue_name = queue_name
-        self.material_repo = material_repo
+        self.material_rp = material_rp
 
     def callback(self, ch, method, properties, body):
         print(self.queue_name)
@@ -15,7 +15,7 @@ class AddMaterialConsumerModel(AbstractConsumerModel):
             data_mt = json.loads(body.decode())
             list_material = []
             for item in data_mt:
-                mt_item = MaterialModel(0,
+                mt_item = MaterialModel(item["id"],
                                         item["name"],
                                         item["status"],
                                         item["quantity"],
@@ -26,10 +26,8 @@ class AddMaterialConsumerModel(AbstractConsumerModel):
                                         item["price"])
                 list_material.append(mt_item)
 
-            self.material_repo.add_material_by_list(list_material)
+            self.material_rp.update_material_by_list(list_material)
         except Exception as e:
-            print("Queue Error")
             print(e)
+
         ch.basic_ack(delivery_tag=method.delivery_tag)
-
-

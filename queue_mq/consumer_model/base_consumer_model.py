@@ -1,6 +1,8 @@
 from abstract import AbstractConsumerModel
-from .add_material_consumer_model import AddMaterialConsumerModel, TestConsumerModel
+from .add_material_consumer_model import AddMaterialConsumerModel
+from .update_material_consumer import UpdateMaterialConsumer
 from repository import MaterialRepository
+from enum_class import QueueNameEnum
 
 
 class DefaultConsumerModel(AbstractConsumerModel):
@@ -14,9 +16,10 @@ class DefaultConsumerModel(AbstractConsumerModel):
 
 
 def switch_consumer(queue_name, pg_db):
-    if queue_name == "AddMaterial":
+    if queue_name == QueueNameEnum.AddMaterial.value:
         material_rp = MaterialRepository(pg_db)
         return AddMaterialConsumerModel(queue_name, material_rp)
-    elif queue_name == "Test":
-        return TestConsumerModel(queue_name)
+    elif queue_name == QueueNameEnum.UpdateMaterial.value:
+        material_rp = MaterialRepository(pg_db)
+        return UpdateMaterialConsumer(queue_name, material_rp)
     return DefaultConsumerModel("")

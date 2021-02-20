@@ -47,6 +47,10 @@ def run_api(pg_db, mq_channel_connect, redis_connect):
     def download_file_material():
         return controller.download_file_material_controller(pg_db, mq_channel_connect, request)
 
+    @app.route('/api/v1/material/file', methods=["PUT"])
+    def update_file_material():
+        return controller.update_file_material_controller(pg_db, mq_channel_connect, request)
+
     @app.route('/api/v1/material_type', methods=["POST"])
     def add_material_type():
         return controller.add_material_type_controller(pg_db, redis_connect, request)

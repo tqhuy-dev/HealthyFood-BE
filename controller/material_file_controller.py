@@ -32,3 +32,18 @@ def download_file_material_controller(pg_db, mq_channel, request):
         print(e)
         return jsonify(
             model.ErrorResponseDto(HTTPStatus.OK, "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
+
+
+def update_file_material_controller(pg_db, mq_channel, request):
+    try:
+        material_rp = repository.MaterialRepository(pg_db)
+        mq_channel_manager = MQChannelManager(mq_channel)
+        material_file_sv = services.MaterialFileServices(material_rp, mq_channel_manager)
+        result, data = material_file_sv.upload_file_material(request)
+        if result is False:
+            return jsonify(model.ErrorResponseDto(HTTPStatus.BAD_REQUEST, data).__dict__), HTTPStatus.BAD_REQUEST
+        return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Success").__dict__)
+    except Exception as e:
+        print(e)
+        return jsonify(
+            model.ErrorResponseDto(HTTPStatus.OK, "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR

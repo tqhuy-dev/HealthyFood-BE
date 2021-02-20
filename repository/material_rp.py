@@ -17,6 +17,10 @@ class AbstractMaterialRepository(abc.ABC):
     def add_material_by_list(self, list_material):
         pass
 
+    @abc.abstractmethod
+    def update_material_by_list(self, list_material):
+        pass
+
 
 class MaterialRepository(AbstractMaterialRepository):
     def __init__(self, pg_db):
@@ -47,7 +51,7 @@ class MaterialRepository(AbstractMaterialRepository):
                 "price >= {} and price <= {}".format(data["min_price"], data["max_price"]))
 
         sql_query = "select id,name,status,quantity,unit,description,material_type,image,price " \
-                    "from public.\"Material\" where {} limit 100".format(" and ".join(sql_condition))
+                    "from public.\"Material\" where {} order by id limit 100".format(" and ".join(sql_condition))
 
         cursor = self.pg_db.cursor()
         cursor.execute(sql_query)
@@ -86,3 +90,36 @@ class MaterialRepository(AbstractMaterialRepository):
         cursor.execute(sql_command)
         self.pg_db.commit()
         cursor.close()
+
+    def update_material_by_list(self, list_material):
+
+        sql_item_update = []
+        for material in list_material:
+            sql_item_update.append(
+                "({},'{}',{},{},'{}','{}',{},'{}',{})".format(material.id,
+                                                              material.name,
+                                                              material.status,
+                                                              material.quantity,
+                                                              material.unit,
+                                                              material.description,
+                                                              material.material_type,
+                                                              material.image,
+                                                              material.price))
+
+            sql_query = "update \"Material\" as a " \
+                        "set name          = b.name," \
+                        "status        = b.status," \
+                        "quantity      = b.quantity," \
+                        "unit          = b.unit," \
+                        "description   = b.description," \
+                        "material_type = b.material_type," \
+                        "image         = b.image," \
+                        "price         = b.price " \
+                        "from (values {}) " \
+                        "as b(id, name, status, quantity, unit, description, material_type, image, price) " \
+                        "where a.id = b.id".format(",".join(sql_item_update))
+
+            cursor = self.pg_db.cursor()
+            cursor.execute(sql_query)
+            self.pg_db.commit()
+            cursor.close()
