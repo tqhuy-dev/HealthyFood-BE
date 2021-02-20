@@ -17,6 +17,9 @@ class MaterialFileServices(object):
             path_file = file.filename.split(".")
             if len(path_file) > 1 and path_file[len(path_file) - 1] != "csv":
                 return False, "File CSV"
+            if len(path_file) <= 1:
+                return False, "Invalid File"
+
             df = pd.read_csv(file)
             list_material = []
             count = 0
@@ -38,8 +41,10 @@ class MaterialFileServices(object):
 
             if len(list_material) > 0:
                 self.mq_channel_manager.publish_message(QueueNameEnum.AddMaterial.value, list_material)
+            return True, "Success"
         except Exception as e:
             print(e)
+            return False, "Internal Error"
 
     def download_file_csv_material(self, request):
         try:
@@ -80,3 +85,19 @@ class MaterialFileServices(object):
             df.to_csv("resource/material.csv", index=False)
         except Exception as e:
             print(e)
+
+    # def upload_file_material(self, request):
+    #     try:
+    #         file = request.files
+    #         pathname = file.filename.split(".")
+    #         if len(pathname) <= 1:
+    #             return False, "Invalid File"
+    #         if len(pathname) > 1 and pathname[1] != "csv":
+    #             return False, "Wrong Type File"
+    #
+    #
+    #
+    #         return True, "Success"
+    #     except Exception as e:
+    #         print(e)
+    #         return False, "Internal Error"

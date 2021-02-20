@@ -11,7 +11,9 @@ def add_file_material_controller(pg_db, mq_channel, request):
         material_rp = repository.MaterialRepository(pg_db)
         mq_channel_manager = MQChannelManager(mq_channel)
         material_file_services = services.MaterialFileServices(material_rp, mq_channel_manager)
-        material_file_services.add_file_list_material(request)
+        result, data = material_file_services.add_file_list_material(request)
+        if result is False:
+            return jsonify(model.ErrorResponseDto(HTTPStatus.BAD_REQUEST, data).__dict__), HTTPStatus.BAD_REQUEST
         return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Success").__dict__)
     except Exception as e:
         print(e)
