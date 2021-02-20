@@ -7,7 +7,7 @@ from gevent.pywsgi import WSGIServer
 import configparser
 
 
-def run_api(pg_db, mq_channel_connect, redis_connect):
+def run_api(pg_db, mq_channel_connect, redis_connect , elasticsearch):
     print("Init RestAPI Python")
     app = flask.Flask(__name__)
 

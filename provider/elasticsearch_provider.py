@@ -7,3 +7,4 @@ def get_es():
         sniff_on_connection_fail=True,
         sniffer_timeout=60)
     print("Connect Elasticsearch")
+    return es
