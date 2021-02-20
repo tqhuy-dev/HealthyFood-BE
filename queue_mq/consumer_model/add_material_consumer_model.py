@@ -12,23 +12,24 @@ class AddMaterialConsumerModel(AbstractConsumerModel):
         print(self.queue_name)
         print(" [x] Received %r" % body.decode())
         try:
-            with json.loads(body.decode()) as data_mt:
-                list_material = []
-                for item in data_mt:
-                    mt_item = MaterialModel(0,
-                                            item["name"],
-                                            item["status"],
-                                            item["quantity"],
-                                            item["unit"],
-                                            item["description"],
-                                            item["material_type"],
-                                            item["image"],
-                                            item["price"])
-                    list_material.append(mt_item)
+            data_mt = json.loads(body.decode())
+            list_material = []
+            for item in data_mt:
+                mt_item = MaterialModel(0,
+                                        item["name"],
+                                        item["status"],
+                                        item["quantity"],
+                                        item["unit"],
+                                        item["description"],
+                                        item["material_type"],
+                                        item["image"],
+                                        item["price"])
+                list_material.append(mt_item)
 
-                self.material_repo.add_material_by_list(list_material)
-        except:
+            self.material_repo.add_material_by_list(list_material)
+        except Exception as e:
             print("Queue Error")
+            print(e)
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
