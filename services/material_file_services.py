@@ -40,9 +40,6 @@ class MaterialFileServices(object):
                 self.mq_channel_manager.publish_message(QueueNameEnum.AddMaterial.value, list_material)
         except Exception as e:
             print(e)
-            return False, "Internal Error"
-        return True, "Success"
-        pass
 
     def download_file_csv_material(self, request):
         try:
@@ -81,7 +78,5 @@ class MaterialFileServices(object):
                 "Price": matrix_material["Price"],
             })
             df.to_csv("resource/material.csv", index=False)
-            return True, "Success"
         except Exception as e:
             print(e)
-            return False, "Internal Error"
