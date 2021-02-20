@@ -7,6 +7,7 @@ config = provider.get_config()
 pg_db = provider.connection_pg_db(config)
 mq_channel_connect = provider.connection_rabbitmq(config)
 redis_connect = provider.get_redis(config)
+es = provider.get_es()
 # Run App
 
 
