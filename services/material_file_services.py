@@ -52,6 +52,7 @@ class MaterialFileServices(object):
             data_material = self.material_rp.get_material(body_filter)
 
             matrix_material = {
+                "Id": [],
                 "Name": [],
                 "Status": [],
                 "Quantity": [],
@@ -59,10 +60,12 @@ class MaterialFileServices(object):
                 "Description": [],
                 "MaterialType": [],
                 "Image": [],
-                "Price": []
+                "Price": [],
+                "Edited": []
             }
             for material in data_material:
                 item = material.get_dict()
+                matrix_material["Id"].append(item["id"])
                 matrix_material["Name"].append(item["name"])
                 matrix_material["Status"].append(item["status"])
                 matrix_material["Quantity"].append(item["quantity"])
@@ -71,8 +74,10 @@ class MaterialFileServices(object):
                 matrix_material["MaterialType"].append(item["material_type"])
                 matrix_material["Image"].append(item["image"])
                 matrix_material["Price"].append(item["price"])
+                matrix_material["Edited"].append(0)
 
             df = pd.DataFrame({
+                "Id": matrix_material["Id"],
                 "Name": matrix_material["Name"],
                 "Status": matrix_material["Status"],
                 "Quantity": matrix_material["Quantity"],
@@ -81,23 +86,44 @@ class MaterialFileServices(object):
                 "MaterialType": matrix_material["MaterialType"],
                 "Image": matrix_material["Image"],
                 "Price": matrix_material["Price"],
+                "Edited": matrix_material["Edited"]
             })
             df.to_csv("resource/material.csv", index=False)
         except Exception as e:
             print(e)
 
-    # def upload_file_material(self, request):
-    #     try:
-    #         file = request.files
-    #         pathname = file.filename.split(".")
-    #         if len(pathname) <= 1:
-    #             return False, "Invalid File"
-    #         if len(pathname) > 1 and pathname[1] != "csv":
-    #             return False, "Wrong Type File"
-    #
-    #
-    #
-    #         return True, "Success"
-    #     except Exception as e:
-    #         print(e)
-    #         return False, "Internal Error"
+    def upload_file_material(self, request):
+        try:
+            file = request.files
+            pathname = file.filename.split(".")
+            if len(pathname) <= 1:
+                return False, "Invalid File"
+            if len(pathname) > 1 and pathname[1] != "csv":
+                return False, "Wrong Type File"
+
+            df = pd.read_csv(file)
+            list_material = []
+            count = 0
+            for index in range(len(df)):
+                if df["Edited"][index]:
+                    material = model.MaterialModel(df["Id"][index],
+                                                   df["Name"][index],
+                                                   int(df["Status"][index]),
+                                                   int(df["Quantity"][index]),
+                                                   df["Unit"][index],
+                                                   df["Description"][index],
+                                                   int(df["MaterialType"][index]),
+                                                   df["Image"][index],
+                                                   int(df["Price"][index]))
+                    list_material.append(material.get_dict())
+                    if count == 5:
+                        self.mq_channel_manager.publish_message(QueueNameEnum.UpdateMaterial, list_material)
+                        list_material.clear()
+                        count = 0
+
+            if len(list_material) > 0:
+                self.mq_channel_manager.publish_message(QueueNameEnum.UpdateMaterial, list_material)
+            return True, "Success"
+        except Exception as e:
+            print(e)
+            return False, "Internal Error"
