@@ -40,10 +40,9 @@ def get_material_controller(pg_db, request):
 def update_file_material_controller(pg_db, mq_channel, request):
     try:
         material_rp = repository.MaterialRepository(pg_db)
-        material_sv = services.MaterialServices(material_rp)
         mq_channel_manager = MQChannelManager(mq_channel)
-        material_sv.set_mq_channel_manager(mq_channel_manager)
-        result, data = material_sv.update_file_list_material(request)
+        material_file_services = services.MaterialFileServices(material_rp, mq_channel_manager)
+        result, data = material_file_services.update_file_list_material(request)
         if result is False:
             return jsonify(model.ErrorResponseDto(HTTPStatus.BAD_REQUEST, data).__dict__), HTTPStatus.BAD_REQUEST
         return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Success").__dict__)
@@ -53,11 +52,12 @@ def update_file_material_controller(pg_db, mq_channel, request):
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
 
 
-def download_file_material_controller(pg_db, request):
+def download_file_material_controller(pg_db, mq_channel, request):
     try:
         material_rp = repository.MaterialRepository(pg_db)
-        material_sv = services.MaterialServices(material_rp)
-        result , data = material_sv.download_file_csv_material(request)
+        mq_channel_manager = MQChannelManager(mq_channel)
+        material_file_services = services.MaterialFileServices(material_rp, mq_channel_manager)
+        result, data = material_file_services.download_file_csv_material(request)
         if result is False:
             return jsonify(model.ErrorResponseDto(HTTPStatus.BAD_REQUEST, data).__dict__), HTTPStatus.BAD_REQUEST
         return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Success").__dict__)
