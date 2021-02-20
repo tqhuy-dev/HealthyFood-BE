@@ -9,7 +9,7 @@ class MaterialFileServices(object):
         self.material_rp = material_rp
         self.mq_channel_manager = mq_channel_manager
 
-    def update_file_list_material(self, request):
+    def add_file_list_material(self, request):
         try:
             if "file" not in request.files:
                 return False, "File must not empty"

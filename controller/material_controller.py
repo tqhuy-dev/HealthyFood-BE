@@ -37,12 +37,12 @@ def get_material_controller(pg_db, request):
                                               "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
 
 
-def update_file_material_controller(pg_db, mq_channel, request):
+def add_file_material_controller(pg_db, mq_channel, request):
     try:
         material_rp = repository.MaterialRepository(pg_db)
         mq_channel_manager = MQChannelManager(mq_channel)
         material_file_services = services.MaterialFileServices(material_rp, mq_channel_manager)
-        material_file_services.update_file_list_material(request)
+        material_file_services.add_file_list_material(request)
         return jsonify(model.SuccessResponseDto(HTTPStatus.OK, "Success").__dict__)
     except Exception as e:
         print(e)
