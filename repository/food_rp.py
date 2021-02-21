@@ -21,7 +21,7 @@ class FoodRepository(object):
                 "id >= {} and id <= {}".format(filter_body["from_id"], filter_body["to_id"]))
 
         sql_condition = " and ".join(sql_condition_arr)
-        sql_query = "SELECT id,name,type_food,price,status,rate,order_total,unit,type_food " \
+        sql_query = "SELECT id,name,type_food,price,status,rate,order_total,unit,type_food,image " \
                     "from public.\"Food\" where {} limit {}".format(sql_condition, filter_body["total"])
         cursor = self.pg_db.cursor()
         cursor.execute(sql_query)
@@ -29,12 +29,30 @@ class FoodRepository(object):
         cursor.close()
         list_food = []
         for item in record:
-            food = model.Food(item["id"], item["name"], item["type_food"], item["price"], item["status"],
+            food = model.Food(item["id"], item["name"], item["type_food"], int(item["price"]), item["status"],
                               item["rate"], item["order_total"],
                               item["unit"])
+            food.set_image(item["image"])
             list_food.append(food)
 
         return list_food
+
+    def add_list_food(self, list_food):
+        sql_item_arr = []
+        for food in list_food:
+            sql_item_arr.append("('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}').".
+                                format(food.name, food.price, food.status, date.today(), date.today(), food.order_total,
+                                       food.rate, food.unit,
+                                       food.type_food, food.image))
+        sql_command = "INSERT INTO public.\"Food\"" \
+                      "(name, price, status, updated_date, " \
+                      "created_date, order_total, rate, unit, type_food,image)" \
+                      "VALUES {}".format(",".join(sql_item_arr))
+
+        cursor = self.pg_db.cursor()
+        cursor.execute(sql_command)
+        self.pg_db.commit()
+        cursor.close()
 
 
 def get_all_food(pg_db, filter_body):
@@ -60,7 +78,7 @@ def get_all_food(pg_db, filter_body):
     cursor.close()
     list_food = []
     for item in record:
-        food = model.Food(item["id"], item["name"], item["type_food"], item["price"], item["status"],
+        food = model.Food(item["id"], item["name"], item["type_food"], int(item["price"]), item["status"],
                           item["rate"], item["order_total"],
                           item["unit"])
         list_food.append(food)

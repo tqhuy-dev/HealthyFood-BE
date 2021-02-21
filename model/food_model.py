@@ -8,6 +8,10 @@ class Food(object):
         self.rate = rate
         self.order_total = order_total
         self.unit = unit
+        self.image = ""
 
     def get_dict(self):
         return self.__dict__
+
+    def set_image(self, image):
+        self.image = image

@@ -10,7 +10,13 @@ import configparser
 def es_router(app, pg_db, mq_channel_connect, redis_connect):
     @app.route('/api/v1/es/food', methods=["POST"])
     def sync_food_es_by_list_id():
-        return controller.sync_es_food_controller(pg_db, mq_channel_connect,request)
+        return controller.sync_es_food_controller(pg_db, mq_channel_connect, request)
+
+
+def food_file_router(app, pg_db, mq_channel_connect, redis_connect):
+    @app.route('/api/v1/food/file', methods=["GET"])
+    def download_food_file():
+        return controller.download_file_food_controller(pg_db, mq_channel_connect, request)
 
 
 def run_api(pg_db, mq_channel_connect, redis_connect):
@@ -69,6 +75,7 @@ def run_api(pg_db, mq_channel_connect, redis_connect):
     def add_food_material(food_id):
         return controller.add_food_material_controller(pg_db, request, food_id)
 
+    food_file_router(app, pg_db, mq_channel_connect, redis_connect)
     es_router(app, pg_db, mq_channel_connect, redis_connect)
 
     @app.errorhandler(HTTPStatus.NOT_FOUND)

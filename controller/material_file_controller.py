@@ -31,7 +31,7 @@ def download_file_material_controller(pg_db, mq_channel, request):
     except Exception as e:
         print(e)
         return jsonify(
-            model.ErrorResponseDto(HTTPStatus.OK, "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
+            model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 def update_file_material_controller(pg_db, mq_channel, request):
@@ -46,4 +46,4 @@ def update_file_material_controller(pg_db, mq_channel, request):
     except Exception as e:
         print(e)
         return jsonify(
-            model.ErrorResponseDto(HTTPStatus.OK, "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
+            model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal Error").__dict__), HTTPStatus.INTERNAL_SERVER_ERROR
