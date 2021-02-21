@@ -1,7 +1,7 @@
 import pandas as pd
 import model
 from enum_class import QueueNameEnum
-from common import food_common_logic
+from common import food_common_logic, handle
 
 
 class FoodFileServices(object):
@@ -14,7 +14,7 @@ class FoodFileServices(object):
             if "file" not in request.files:
                 return False, "Bad Request"
 
-            file = request.files
+            file = request.files["file"]
             df = pd.read_csv(file)
 
             list_food = []
@@ -22,23 +22,23 @@ class FoodFileServices(object):
             for index in range(len(df)):
                 food = model.Food(0,
                                   df["Name"][index],
-                                  df["TypeFood"][index],
-                                  df["Price"][index],
-                                  df["Status"][index],
-                                  0,
-                                  0,
-                                  df["Unit"][index])
-                food.set_image(df["Image"][index])
+                                  int(df["TypeFood"][index]),
+                                  int(df["Price"][index]),
+                                  int(df["Status"][index]),
+                                  int(df["OrderTotal"][index]),
+                                  int(df["Rate"][index]),
+                                  handle.convert_nan_to_string(df["Unit"][index]))
+                food.set_image(handle.convert_nan_to_string(df["Image"][index]))
                 list_food.append(food.get_dict())
                 count += 1
 
                 if count == 10:
-                    self.mq_channel_manager.publish_message(QueueNameEnum.SyncESFoodByList.value, list_food)
+                    self.mq_channel_manager.publish_message(QueueNameEnum.AddFood.value, list_food)
                     list_food.clear()
                     count = 0
 
             if len(list_food) > 0:
-                self.mq_channel_manager.publish_message(QueueNameEnum.SyncESFoodByList.value, list_food)
+                self.mq_channel_manager.publish_message(QueueNameEnum.AddFood.value, list_food)
 
             return True, "Success"
         except Exception as e:

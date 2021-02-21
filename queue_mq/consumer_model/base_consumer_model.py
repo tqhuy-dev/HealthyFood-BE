@@ -4,6 +4,7 @@ from .update_material_consumer import UpdateMaterialConsumer
 from repository import MaterialRepository, FoodRepository
 from enum_class import QueueNameEnum
 from .sync_es_food_by_list_consumer_model import SyncESFoodByList
+from .add_food_consumer_model import AddFoodConsumerModel
 
 
 class DefaultConsumerModel(AbstractConsumerModel):
@@ -26,4 +27,7 @@ def switch_consumer(queue_name, pg_db):
     elif queue_name == QueueNameEnum.SyncESFoodByList.value:
         food_rp = FoodRepository(pg_db)
         return SyncESFoodByList(queue_name, food_rp)
+    elif queue_name == QueueNameEnum.AddFood.value:
+        food_rp = FoodRepository(pg_db)
+        return AddFoodConsumerModel(queue_name, food_rp)
     return DefaultConsumerModel("")

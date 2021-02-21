@@ -18,6 +18,10 @@ def food_file_router(app, pg_db, mq_channel_connect, redis_connect):
     def download_food_file():
         return controller.download_file_food_controller(pg_db, mq_channel_connect, request)
 
+    @app.route('/api/v1/food/file', methods=["POST"])
+    def add_food_by_file():
+        return controller.add_file_food_controller(pg_db, mq_channel_connect, request)
+
 
 def run_api(pg_db, mq_channel_connect, redis_connect):
     print("Init RestAPI Python")

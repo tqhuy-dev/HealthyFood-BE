@@ -6,3 +6,4 @@ class QueueNameEnum(enum.Enum, metaclass=default_enum.DefaultEnumMeta):
     AddMaterial = "AddMaterial"
     UpdateMaterial = "UpdateMaterial"
     SyncESFoodByList = "SyncESFoodByList"
+    AddFood = "AddFood"

@@ -14,6 +14,11 @@
       "QueueName": "SyncESFoodByList",
       "Active": true,
       "NumRetry": 0
+    },
+    {
+      "QueueName": "AddFood",
+      "Active": true,
+      "NumRetry": 0
     }
   ]
 }
