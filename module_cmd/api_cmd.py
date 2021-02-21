@@ -7,7 +7,13 @@ from gevent.pywsgi import WSGIServer
 import configparser
 
 
-def run_api(pg_db, mq_channel_connect, redis_connect , elasticsearch):
+def es_router(app, pg_db, mq_channel_connect, redis_connect):
+    @app.route('/api/v1/es/food', methods=["POST"])
+    def sync_food_es_by_list_id():
+        return controller.sync_es_food_controller(pg_db, mq_channel_connect,request)
+
+
+def run_api(pg_db, mq_channel_connect, redis_connect):
     print("Init RestAPI Python")
     app = flask.Flask(__name__)
 
@@ -62,6 +68,8 @@ def run_api(pg_db, mq_channel_connect, redis_connect , elasticsearch):
     @app.route('/api/v1/food_material/<food_id>', methods=["POST"])
     def add_food_material(food_id):
         return controller.add_food_material_controller(pg_db, request, food_id)
+
+    es_router(app, pg_db, mq_channel_connect, redis_connect)
 
     @app.errorhandler(HTTPStatus.NOT_FOUND)
     def page_not_found(e):

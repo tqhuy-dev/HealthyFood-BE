@@ -11,7 +11,7 @@
       "NumRetry": 0
     },
     {
-      "QueueName": "Test",
+      "QueueName": "SyncESFoodByList",
       "Active": true,
       "NumRetry": 0
     }

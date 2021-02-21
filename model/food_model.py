@@ -8,3 +8,6 @@ class Food(object):
         self.rate = rate
         self.order_total = order_total
         self.unit = unit
+
+    def get_dict(self):
+        return self.__dict__
