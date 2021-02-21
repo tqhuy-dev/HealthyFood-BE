@@ -40,7 +40,7 @@ class FoodRepository(object):
     def add_list_food(self, list_food):
         sql_item_arr = []
         for food in list_food:
-            sql_item_arr.append("('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}').".
+            sql_item_arr.append("('{}', {}, {}, '{}', '{}', {}, {}, '{}', {}, '{}') ".
                                 format(food.name, food.price, food.status, date.today(), date.today(), food.order_total,
                                        food.rate, food.unit,
                                        food.type_food, food.image))
