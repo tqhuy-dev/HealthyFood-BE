@@ -18,6 +18,6 @@ else:
         if sys.argv[1] == 'api':
             module_cmd.run_api(pg_db, mq_channel_connect, redis_connect, es)
         elif sys.argv[1] == 'consumer':
-            module_cmd.run_consumer(mq_channel_connect, pg_db)
+            module_cmd.run_consumer(mq_channel_connect, pg_db, es)
     else:
         print("Hello World")

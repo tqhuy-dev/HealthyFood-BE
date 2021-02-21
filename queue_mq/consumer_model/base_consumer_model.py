@@ -5,6 +5,7 @@ from repository import MaterialRepository, FoodRepository
 from enum_class import QueueNameEnum
 from .sync_es_food_by_list_consumer_model import SyncESFoodByList
 from .add_food_consumer_model import AddFoodConsumerModel
+from provider import ElasticsearchManager
 
 
 class DefaultConsumerModel(AbstractConsumerModel):
@@ -17,7 +18,7 @@ class DefaultConsumerModel(AbstractConsumerModel):
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-def switch_consumer(queue_name, pg_db):
+def switch_consumer(queue_name, pg_db, es):
     if queue_name == QueueNameEnum.AddMaterial.value:
         material_rp = MaterialRepository(pg_db)
         return AddMaterialConsumerModel(queue_name, material_rp)
@@ -26,7 +27,8 @@ def switch_consumer(queue_name, pg_db):
         return UpdateMaterialConsumer(queue_name, material_rp)
     elif queue_name == QueueNameEnum.SyncESFoodByList.value:
         food_rp = FoodRepository(pg_db)
-        return SyncESFoodByList(queue_name, food_rp)
+        elasticsearch_manager = ElasticsearchManager(es)
+        return SyncESFoodByList(queue_name, food_rp, elasticsearch_manager)
     elif queue_name == QueueNameEnum.AddFood.value:
         food_rp = FoodRepository(pg_db)
         return AddFoodConsumerModel(queue_name, food_rp)

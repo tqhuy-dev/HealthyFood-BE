@@ -6,37 +6,24 @@ import time
 
 
 class SyncESFoodByList(AbstractConsumerModel):
-    def __init__(self, queue_name, food_rp):
+    def __init__(self, queue_name, food_rp, elasticsearch_manager):
         self.queue_name = queue_name
         self.food_rp = food_rp
+        self.elasticsearch_manager = elasticsearch_manager
 
     def callback(self, ch, method, properties, body):
         try:
             print(self.queue_name)
             print(" [x] Received %r" % body.decode())
 
-            # list_data = json.loads(body.decode())
-            # list_food = []
-            # for item in list_data:
-            #     food = model.Food(0,
-            #                       item["name"],
-            #                       item["type_food"],
-            #                       item["price"],
-            #                       item["status"],
-            #                       item["order_total"],
-            #                       item["rate"],
-            #                       item["unit"])
-            #     food.set_image(item["image"])
-            #     list_food.append(food)
+            list_data = json.loads(body.decode())
 
-            # self.food_rp.add_list_food(list_food)
-
-            def test(num):
-                time.sleep(1)
-                print("Number:", num)
+            def sync_es_food(food_document):
+                print("Sync elasticsearch with food id: ", food_document["id"])
+                self.elasticsearch_manager.index_document_food(food_document)
 
             with ThreadPoolExecutor(max_workers=3) as executor:
-                data = {executor.submit(test, num): num for num in [1, 2, 3, 4, 5, 6, 7, 8]}
+                data = {executor.submit(sync_es_food, item): item for item in list_data}
 
         except Exception as e:
             print(e)

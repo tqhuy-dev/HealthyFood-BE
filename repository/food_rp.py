@@ -30,7 +30,7 @@ class FoodRepository(object):
         list_food = []
         for item in record:
             food = model.Food(item["id"], item["name"], item["type_food"], int(item["price"]), item["status"],
-                              item["rate"], item["order_total"],
+                              item["order_total"], item["rate"],
                               item["unit"])
             food.set_image(item["image"])
             list_food.append(food)

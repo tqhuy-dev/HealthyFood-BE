@@ -13,7 +13,7 @@ class ElasticsearchManager(object):
     def __init__(self, es):
         self.es = es
 
-    def index_food(self, document):
+    def index_document_food(self, document):
         self.es.index(index=IndexElasticEnum.Food.value, body=document)
 
     def init_index(self, index_name, index_mapper_body):
