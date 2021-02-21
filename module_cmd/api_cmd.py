@@ -7,10 +7,14 @@ from gevent.pywsgi import WSGIServer
 import configparser
 
 
-def es_router(app, pg_db, mq_channel_connect, redis_connect):
+def es_router(app, pg_db, mq_channel_connect, redis_connect, es):
     @app.route('/api/v1/es/food', methods=["POST"])
     def sync_food_es_by_list_id():
         return controller.sync_es_food_controller(pg_db, mq_channel_connect, request)
+
+    @app.route('/api/v1/es/init', methods=["GET"])
+    def init_index_es():
+        return controller.init_index_elasticsearch_controller(es)
 
 
 def food_file_router(app, pg_db, mq_channel_connect, redis_connect):
@@ -23,7 +27,7 @@ def food_file_router(app, pg_db, mq_channel_connect, redis_connect):
         return controller.add_file_food_controller(pg_db, mq_channel_connect, request)
 
 
-def run_api(pg_db, mq_channel_connect, redis_connect):
+def run_api(pg_db, mq_channel_connect, redis_connect, es):
     print("Init RestAPI Python")
     app = flask.Flask(__name__)
 
@@ -80,7 +84,7 @@ def run_api(pg_db, mq_channel_connect, redis_connect):
         return controller.add_food_material_controller(pg_db, request, food_id)
 
     food_file_router(app, pg_db, mq_channel_connect, redis_connect)
-    es_router(app, pg_db, mq_channel_connect, redis_connect)
+    es_router(app, pg_db, mq_channel_connect, redis_connect, es)
 
     @app.errorhandler(HTTPStatus.NOT_FOUND)
     def page_not_found(e):

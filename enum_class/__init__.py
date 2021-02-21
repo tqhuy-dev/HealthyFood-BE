@@ -4,3 +4,5 @@ from .food_type_enum import FoodTypeEnum
 from .status_material_type_enum import StatusMaterialTypeEnum
 from .queue_name_enum import QueueNameEnum
 from .status_material_enum import StatusMaterialEnum
+from .index_es_enum import IndexElasticEnum
+from .index_es_mapping_enum import IndexElasticMappingEnum
