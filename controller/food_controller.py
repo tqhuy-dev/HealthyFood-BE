@@ -2,15 +2,17 @@ import services
 import model
 from http import HTTPStatus
 from flask import jsonify
+import repository
+import provider
 
 
-def get_all_food_controller(request, pg_db):
+def get_all_food_controller(pg_db, es, request):
     try:
-        result, data = services.get_all_food(pg_db, request)
-        if result:
-            return jsonify(model.SuccessResponseDto(HTTPStatus.OK, data).__dict__)
-        else:
-            return jsonify(model.ErrorResponseDto(HTTPStatus.BAD_REQUEST, data).__dict__), HTTPStatus.BAD_REQUEST
+        food_rp = repository.FoodRepository(pg_db)
+        elasticsearch_manager = provider.ElasticsearchManager(es)
+        food_sv = services.FoodServices(food_rp, elasticsearch_manager)
+        result = food_sv.search_food_elasticsearch(request)
+        return jsonify(model.SuccessResponseDto(HTTPStatus.OK, result).__dict__)
     except Exception as e:
         print(e)
         return jsonify(model.ErrorResponseDto(HTTPStatus.INTERNAL_SERVER_ERROR,

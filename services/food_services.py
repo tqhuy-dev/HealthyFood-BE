@@ -1,7 +1,20 @@
 import repository
 import model
 import enum_class
-from common import constant
+from common import constant, food_common_logic
+
+
+class FoodServices(object):
+    def __init__(self, food_rp, elasticsearch_manager):
+        self.food_rp = food_rp
+        self.elasticsearch_manager = elasticsearch_manager
+
+    def search_food_elasticsearch(self, request):
+        query_body = food_common_logic.build_food_filter_condition_query_es(request)
+        data = self.elasticsearch_manager.search_index(enum_class.IndexElasticEnum.Food.value,
+                                                       query_body["query"],
+                                                       query_body["total"])
+        return data
 
 
 def get_all_food(pg_db, request):

@@ -33,7 +33,7 @@ def run_api(pg_db, mq_channel_connect, redis_connect, es):
 
     @app.route('/api/v1/food', methods=["GET"])
     def get_all_food():
-        return controller.get_all_food_controller(request, pg_db)
+        return controller.get_all_food_controller(pg_db, es, request)
 
     @app.route('/api/v1/food', methods=["POST"])
     def add_food():
