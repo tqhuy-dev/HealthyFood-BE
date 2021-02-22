@@ -14,7 +14,7 @@ class IndexElasticMappingEnum(enum.Enum, metaclass=default_enum.DefaultEnumMeta)
                     "type": "integer"  # formerly "string"
                 },
                 "name": {
-                    "type": "text"
+                    "type": "keyword"
                 },
                 "price": {
                     "type": "double"
@@ -32,10 +32,10 @@ class IndexElasticMappingEnum(enum.Enum, metaclass=default_enum.DefaultEnumMeta)
                     "type": "integer"
                 },
                 "unit": {
-                    "type": "text"
+                    "type": "keyword"
                 },
                 "image": {
-                    "type": "text"
+                    "type": "keyword"
                 }
             }
         }

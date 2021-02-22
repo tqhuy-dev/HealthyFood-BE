@@ -3,6 +3,7 @@ import json
 import model
 from concurrent.futures import ThreadPoolExecutor
 import time
+from enum_class import IndexElasticEnum
 
 
 class SyncESFoodByList(AbstractConsumerModel):
@@ -20,7 +21,7 @@ class SyncESFoodByList(AbstractConsumerModel):
 
             def sync_es_food(food_document):
                 print("Sync elasticsearch with food id: ", food_document["id"])
-                self.elasticsearch_manager.index_document_food(food_document)
+                self.elasticsearch_manager.index_document(IndexElasticEnum.Food.value, food_document)
 
             with ThreadPoolExecutor(max_workers=3) as executor:
                 data = {executor.submit(sync_es_food, item): item for item in list_data}
