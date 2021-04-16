@@ -1,5 +1,6 @@
 import json
 from queue_mq import switch_consumer
+import pandas as pd
 
 
 def run_consumer(mq_channel_connect, pg_db, es):
@@ -12,3 +13,18 @@ def run_consumer(mq_channel_connect, pg_db, es):
                                              on_message_callback=consumer_model.callback)
     print("Running Consumer....")
     mq_channel_connect.start_consuming()
+
+
+def test():
+    tuples = []
+    values = []
+    for index in range(500):
+        tuples.append(
+            (index, index, index, index, index, index, index, index, index, index, index, index, index, index))
+        tuples.append(
+            (index, index, index, index, index, index, index, index, index, index, index, index, index, index))
+        values.append([1, 2])
+        values.append([1, 2])
+    index = pd.MultiIndex.from_tuples(tuples)
+    df = pd.DataFrame(values, columns=['max_speed', 'shield'], index=index)
+    df.to_excel("resource/food.xlsx", merge_cells=True)
